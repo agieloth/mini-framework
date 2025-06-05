@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowJS Framework - Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app"></div>
+    
+    <!-- Inclure le framework -->
+    <script src="flowjs.js"></script>
+    
+    <script>
+        // ============ APPLICATION DE TEST ============
+        
+        // Initialiser l'état
+        Flow.setState({
+            count: 0,
+            todos: [],
+            newTodo: '',
+            name: 'FlowJS'
+        });
+
+        // Composant principal
+        function App() {
+            const state = Flow.getState();
+            
+            return Flow.div()
+                .class('container')
+                .child(
+                    // En-tête
+                    Flow.header()
+                        .class('header')
+                        .child(
+                            Flow.h1(`Bienvenue dans ${state.name}!`)
+                                .class('title'),
+                            Flow.p('Un framework JavaScript moderne avec Virtual DOM')
+                                .class('subtitle')
+                        ),
+                    
+                    // Section compteur
+                    Flow.section()
+                        .class('section')
+                        .child(
+                            Flow.h2('Compteur Interactif'),
+                            Flow.div()
+                                .class('counter')
+                                .child(
+                                    Flow.button('-')
+                                        .class('btn btn-danger')
+                                        .onClick(() => Flow.setState({ count: state.count - 1 })),
+                                    Flow.span(state.count)
+                                        .class('count-display'),
+                                    Flow.button('+')
+                                        .class('btn btn-success')
+                                        .onClick(() => Flow.setState({ count: state.count + 1 })),
+                                    Flow.button('Reset')
+                                        .class('btn btn-secondary')
+                                        .onClick(() => Flow.setState({ count: 0 }))
+                                )
+                        ),
+                    
+                    // Section todo
+                    Flow.section()
+                        .class('section')
+                        .child(
+                            Flow.h2('Liste de Tâches'),
+                            Flow.div()
+                                .class('todo-container')
+                                .child(
+                                    Flow.input()
+                                        .class('todo-input')
+                                        .type('text')
+                                        .placeholder('Ajouter une nouvelle tâche...')
+                                        .value(state.newTodo)
+                                        .onInput((e) => Flow.setState({ newTodo: e.target.value }))
+                                        .onKeyPress((e) => {
+                                            if (e.key === 'Enter' && state.newTodo.trim()) {
+                                                Flow.setState({
+                                                    todos: [...state.todos, {
+                                                        id: Date.now(),
+                                                        text: state.newTodo.trim(),
+                                                        completed: false
+                                                    }],
+                                                    newTodo: ''
+                                                });
+                                            }
+                                        }),
+                                    Flow.button('Ajouter')
+                                        .class('btn btn-primary')
+                                        .onClick(() => {
+                                            if (state.newTodo.trim()) {
+                                                Flow.setState({
+                                                    todos: [...state.todos, {
+                                                        id: Date.now(),
+                                                        text: state.newTodo.trim(),
+                                                        completed: false
+                                                    }],
+                                                    newTodo: ''
+                                                });
+                                            }
+                                        })
+                                ),
+                            
+                            // Liste des todos
+                            state.todos.length > 0 
+                                ? Flow.ul()
+                                    .class('todo-list')
+                                    .child(
+                                        ...state.todos.map(todo => 
+                                            Flow.li()
+                                                .class(`todo-item ${todo.completed ? 'completed' : ''}`)
+                                                .child(
+                                                    Flow.input()
+                                                        .type('checkbox')
+                                                        .attr('checked', todo.completed)
+                                                        .class('todo-checkbox')
+                                                        .onChange(() => {
+                                                            const updatedTodos = state.todos.map(t => 
+                                                                t.id === todo.id ? { ...t, completed: !t.completed } : t
+                                                            );
+                                                            Flow.setState({ todos: updatedTodos });
+                                                        }),
+                                                    Flow.span(todo.text)
+                                                        .class('todo-text'),
+                                                    Flow.button('×')
+                                                        .class('btn btn-danger btn-small')
+                                                        .onClick(() => {
+                                                            const filteredTodos = state.todos.filter(t => t.id !== todo.id);
+                                                            Flow.setState({ todos: filteredTodos });
+                                                        })
+                                                ).build()
+                                        )
+                                    )
+                                : Flow.p('Aucune tâche pour le moment.')
+                                    .class('empty-message'),
+                            
+                            // Statistiques
+                            state.todos.length > 0 && Flow.div()
+                                .class('todo-stats')
+                                .child(
+                                    Flow.p(`Total: ${state.todos.length} | Complétées: ${state.todos.filter(t => t.completed).length} | Restantes: ${state.todos.filter(t => !t.completed).length}`)
+                                        .class('stats-text')
+                                )
+                        ),
+                    
+                    // Footer
+                    Flow.footer()
+                        .class('footer')
+                        .child(
+                            Flow.p('Créé avec FlowJS Framework 🚀')
+                                .class('footer-text')
+                        )
+                )
+                .build();
+        }
+
+        // Monter l'application
+        Flow.mount('#app', App);
+        
+        console.log('FlowJS Framework chargé et application montée!');
+    </script>
+</body>
+</html>
