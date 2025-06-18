@@ -1,43 +1,6 @@
-// export function createStore(initialState = {}) {
-//   let state = { ...initialState };
-//   const listeners = [];
-
-//   function getState() {
-//     return state;
-//   }
-
-//  // Dans store.js
-// function setState(newState) {
-//   const oldState = { ...state };
-//   state = { ...state, ...newState };
-  
-//   // Seulement notifier si quelque chose a changé
-//   if (JSON.stringify(oldState) !== JSON.stringify(state)) {
-//     listeners.forEach((listener) => listener(state));
-//   }
-// }
-
-//   function subscribe(listener) {
-//     listeners.push(listener);
-//     // Retourner une fonction pour se désabonner
-//     return () => {
-//       const index = listeners.indexOf(listener);
-//       if (index > -1) listeners.splice(index, 1);
-//     };
-//   }
-
-//   return {
-//     getState,
-//     setState,
-//     subscribe
-//   };
-// }
-
-
 // app/store.js - Version améliorée
-
 export function createStore(initialState = {}) {
-  let state = { ...initialState };
+  let state = { ...initialState }; // crée une copie de initialState dans la variable state
   const listeners = [];
 
   function getState() {

@@ -1,37 +1,3 @@
-// export function render(vnode) {
-//   if (typeof vnode === 'string') {
-//     return document.createTextNode(vnode);
-//   }
-
-//   const $el = document.createElement(vnode.tag);
-
-//   // Gérer les attributs HTML (ex: class, id, type, etc.)
-//   if (vnode.attrs) {
-//     for (const [key, value] of Object.entries(vnode.attrs)) {
-//       $el.setAttribute(key, value);
-//     }
-//   }
-
-//   // Gérer les événements personnalisés (sans onClick)
-//   if (vnode.events) {
-//     for (const [event, handler] of Object.entries(vnode.events)) {
-//       $el.addEventListener(event, handler);
-//     }
-//   }
-
-//   // Gérer les enfants récursivement
-//   if (vnode.children) {
-//     vnode.children.forEach(child => {
-//       $el.appendChild(render(child));
-//     });
-//   }
-
-//   return $el;
-// }
-
-
-// Gardez seulement render() dans dom.js et utilisez-le partout
-
 // app/dom.js - Version corrigée et unifiée
 
 export function render(vnode) {
