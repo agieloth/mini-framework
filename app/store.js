@@ -50,18 +50,9 @@ export function createStore(initialState = {}) {
     };
   }
 
-  // Méthode pour déboguer
-  function debug() {
-    return {
-      state: { ...state },
-      listenersCount: listeners.length
-    };
-  }
-
   return {
     getState,
     setState,
-    subscribe,
-    debug
+    subscribe
   };
 }
