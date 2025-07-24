@@ -1,7 +1,7 @@
 // main.js - Version corrigée avec exemples de test
 
-import { App } from './app/app.js';
-import { createStore } from './app/store.js';
+import { App } from '../../framework/app.js';
+import { createStore } from '../../framework/store.js';
 
 // Créer le store global
 const store = createStore({ 

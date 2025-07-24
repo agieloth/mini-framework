@@ -1,6 +1,6 @@
 // app/todoStore.js - Store spécialisé pour TodoMVC
 
-import { createStore } from './store.js';
+import { createStore } from '../../framework/store.js';
 
 // État initial des todos
 const initialState = {

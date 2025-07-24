@@ -1,9 +1,9 @@
 // todoMain.js - Point d'entrée pour TodoMVC
 
-import { App } from '../app/app.js';
-import { render } from '../app/dom.js';
-import { todoStore, todoActions } from '../app/todoStore.js';
-import { TodoApp } from '../app/todoComponents.js';
+import { App } from '../../framework/app.js';
+import { render } from '../../framework/dom.js';
+import { todoStore, todoActions } from './todoStore.js';
+import { TodoApp } from './todoComponents.js';
 
 // Fonction pour re-render l'application
 function renderApp() {
