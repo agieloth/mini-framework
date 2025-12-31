@@ -1,8 +1,6 @@
+// app/app.js - gestion de l'application et du routing
+
 import { render } from './dom.js';
-
-
-// app/app.js - Version corrigée
-
 
 export const App = {
   routes: {},

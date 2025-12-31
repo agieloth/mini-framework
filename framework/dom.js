@@ -1,4 +1,4 @@
-// app/dom.js - Version corrigée et unifiée
+// app/dom.js - Abstraction du DOM via Virtual Nodes
 
 export function render(vnode) {
   // Gérer les chaînes de caractères et nombres
@@ -14,7 +14,7 @@ export function render(vnode) {
   // Créer l'élément à partir de l'élément tag
   const el = document.createElement(vnode.tag);
 
-  // Gérer les attributs(ex: id, class, href...) ET les événements (onClick, onMouseover…)
+  // Gérer les attributs (ex: id, class, href...) ET les événements (onClick, onMouseover…)
   for (const key in vnode.attrs || {}) {
     const value = vnode.attrs[key];
     if (key.startsWith('on') && typeof value === 'function') {
@@ -24,12 +24,7 @@ export function render(vnode) {
     }
   }
 
-  // Gérer les événements personnalisés (système alternatif)
-  // if (vnode.events) {
-  //   for (const [event, handler] of Object.entries(vnode.events)) {
-  //     el.addEventListener(event, handler);
-  //   }
-  // }
+  // Gérer les événements via la propriété events (système alternatif)
   for (const evt in vnode.events || {}) {
     el.addEventListener(evt, vnode.events[evt]);
   }

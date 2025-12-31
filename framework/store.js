@@ -1,4 +1,4 @@
-// app/store.js - Version améliorée
+// app/store.js - State Management avec pattern Observer
 export function createStore(initialState = {}) {
   let state = { ...initialState }; // crée une copie de initialState dans la variable state
   const listeners = [];
@@ -50,9 +50,17 @@ export function createStore(initialState = {}) {
     };
   }
 
+  function debug() {
+    return {
+      state: { ...state },
+      listenersCount: listeners.length
+    };
+  }
+
   return {
     getState,
     setState,
-    subscribe
+    subscribe,
+    debug
   };
 }

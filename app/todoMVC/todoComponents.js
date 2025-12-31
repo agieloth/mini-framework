@@ -217,14 +217,16 @@ export function TodoFooter() {
         ]
       },
       TodoFilters(),
-      hasCompletedTodos ? {
+      {
         tag: 'button',
-        attrs: { class: 'clear-completed' },
+        attrs: { 
+          class: 'clear-completed'
+        },
         children: ['Clear completed'],
         events: {
           click: () => todoActions.clearCompleted()
         }
-      } : null
+      }
     ].filter(Boolean)
   };
 }
