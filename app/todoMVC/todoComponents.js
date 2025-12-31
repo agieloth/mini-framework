@@ -1,4 +1,4 @@
-// app/todoComponents.js - Composants pour TodoMVC
+// todoComponents.js
 
 import { todoActions, todoSelectors } from './todoStore.js';
 
@@ -75,7 +75,6 @@ export function TodoItem({ todo }) {
           keydown: handleKeyDown,
           blur: handleBlur,
           focus: (e) => {
-            // Sélectionner tout le texte lors du focus
             e.target.select();
           }
         }
@@ -90,7 +89,10 @@ export function TodoList() {
 
   return {
     tag: 'ul',
-    attrs: { class: 'todo-list' },
+    attrs: { 
+      class: 'todo-list',
+      'data-testid': 'todo-list'
+    },
     children: filteredTodos.map(todo => TodoItem({ todo }))
   };
 }
@@ -103,20 +105,44 @@ export function NewTodoInput() {
       if (text) {
         todoActions.addTodo(text);
         e.target.value = '';
+
+        // Re-focus du curseur immédiatement après ajout 
+        setTimeout(() => {
+          const input = document.getElementById('todo-input');
+          if (input) input.focus();
+        }, 0);
       }
     }
   };
 
   return {
-    tag: 'input',
-    attrs: {
-      class: 'new-todo',
-      placeholder: 'What needs to be done?',
-      autofocus: 'autofocus'
-    },
-    events: {
-      keydown: handleKeyDown
-    }
+    tag: 'div',
+    attrs: { class: 'input-container' },
+    children: [
+      {
+        tag: 'input',
+        attrs: {
+          class: 'new-todo',
+          id: 'todo-input',
+          type: 'text',
+          'data-testid': 'text-input',
+          placeholder: 'What needs to be done?',
+          // autofocus: 'autofocus',
+          value: ''
+        },
+        events: {
+          keydown: handleKeyDown
+        }
+      },
+      {
+        tag: 'label',
+        attrs: { 
+          class: 'visually-hidden',
+          for: 'todo-input'
+        },
+        children: ['New Todo Input']
+      }
+    ]
   };
 }
 
@@ -189,7 +215,7 @@ export function TodoFilters() {
   };
 }
 
-// Composant pour le footer
+// Composant pour le footer des todos
 export function TodoFooter() {
   const activeCount = todoSelectors.getActiveCount();
   const hasCompletedTodos = todoSelectors.hasCompletedTodos();
@@ -219,9 +245,7 @@ export function TodoFooter() {
       TodoFilters(),
       {
         tag: 'button',
-        attrs: { 
-          class: 'clear-completed'
-        },
+        attrs: { class: 'clear-completed' },
         children: ['Clear completed'],
         events: {
           click: () => todoActions.clearCompleted()
@@ -231,57 +255,59 @@ export function TodoFooter() {
   };
 }
 
-// Composant principal TodoMVC
-export function TodoApp() {
-  const allTodos = todoSelectors.getAllTodos();
-  const hasAnyTodos = allTodos.length > 0;
+// Contenu de la section todoapp (sans la section elle-même)
+export function TodoAppContent() {
+  return [
+    {
+      tag: 'header',
+      attrs: { 
+        class: 'header',
+        'data-testid': 'header'
+      },
+      children: [
+        {
+          tag: 'h1',
+          children: ['todos']
+        },
+        NewTodoInput()
+      ]
+    },
+    {
+      tag: 'main',
+      attrs: { 
+        class: 'main',
+        'data-testid': 'main'
+      },
+      children: [
+        ToggleAllButton(),
+        TodoList()
+      ].filter(Boolean)
+    },
+    TodoFooter()
+  ].filter(Boolean);
+}
 
+// Footer info séparé
+export function InfoFooter() {
   return {
     tag: 'div',
     children: [
       {
-        tag: 'section',
-        attrs: { class: 'todoapp' },
-        children: [
-          {
-            tag: 'header',
-            attrs: { class: 'header' },
-            children: [
-              {
-                tag: 'h1',
-                children: ['todos']
-              },
-              NewTodoInput()
-            ]
-          },
-          hasAnyTodos ? {
-            tag: 'section',
-            attrs: { class: 'main' },
-            children: [
-              ToggleAllButton(),
-              TodoList()
-            ].filter(Boolean)
-          } : null,
-          TodoFooter()
-        ].filter(Boolean)
+        tag: 'p',
+        children: ['Double-click to edit a todo']
       },
       {
-        tag: 'footer',
-        attrs: { class: 'info' },
+        tag: 'p',
+        children: ['Created by the TodoMVC Team']
+      },
+      {
+        tag: 'p',
         children: [
+          'Part of ',
           {
-            tag: 'p',
-            children: ['Double-click to edit a todo']
-          },
-          {
-            tag: 'p',
-            children: [
-              'Created with ',
-              {
-                tag: 'strong',
-                children: ['Mini Framework']
-              }
-            ]
+            tag: 'a',
+            attrs: { href: 'http://todomvc.com' },
+            children: ['TodoMVC']
           }
         ]
       }

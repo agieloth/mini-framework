@@ -17,7 +17,7 @@ export const App = {
     this.currentRoute = hash;
     
     const component = this.routes[hash];
-    const root = document.getElementById('app');
+    const root = document.getElementById('root');
     
     if (component) {
       try {
